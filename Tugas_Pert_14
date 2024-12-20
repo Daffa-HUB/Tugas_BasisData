@@ -1,1 +1,62 @@
+-- Table: biodata_pengguna
+CREATE TABLE Admin_BuMaya (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(50) NOT NULL,
+    usia INT NOT NULL,
+    pekerjaan VARCHAR(100),
+    lokasi VARCHAR(100),
+    keluarga VARCHAR(100),
+    hobi VARCHAR(100)
+);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON database_bumaya.Admin_BuMaya 
+GRANT SELECT, INSERT, UPDATE ON database_bumaya.jadwal_pengguna 
+
+CREATE TABLE users_Anak (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,      
+    username VARCHAR(50) NOT NULL UNIQUE,         
+    full_name VARCHAR(100),                       
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,      
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP 
+);
+
+
+-- Table: jadwal_pengguna
+CREATE TABLE jadwal_pengguna (
+    jadwal_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    nama_kegiatan VARCHAR(50) NOT NULL,
+    mulai_kegiatan TIME NOT NULL,
+    selesai_kegiatan TIME NOT NULL,
+    hari DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES biodata_pengguna(user_id)
+);
+
+-- Table: kegiatan_fisik_pengguna
+CREATE TABLE kegiatan_fisik_pengguna (
+    kegiatan_id INT AUTO_INCREMENT PRIMARY KEY,
+    jadwal_id INT NOT NULL,
+    jenis_kegiatan VARCHAR(50) NOT NULL,
+    waktu_kegiatan TIME NOT NULL,
+    FOREIGN KEY (jadwal_id) REFERENCES jadwal_pengguna(jadwal_id)
+);
+
+-- Table: makanan_sehat_pengguna
+CREATE TABLE makanan_sehat_pengguna (
+    makanan_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    jenis_makanan VARCHAR(50) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES biodata_pengguna(user_id)
+);
+
+-- Table: audit_trail
+CREATE TABLE audit_trail (
+    audit_id INT AUTO_INCREMENT PRIMARY KEY,
+    table_name VARCHAR(50) NOT NULL,
+    operation VARCHAR(10) NOT NULL,
+    old_data TEXT,
+    new_data TEXT,
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INT
+);
 
